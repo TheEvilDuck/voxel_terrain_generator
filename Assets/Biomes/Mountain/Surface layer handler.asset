@@ -9,15 +9,8 @@ MonoBehaviour:
   m_GameObject: {fileID: 0}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 672600d74937dd440b95fa798fc3119f, type: 3}
-  m_Name: Ocean
+  m_Script: {fileID: 11500000, guid: ba70378cc1d89e0498b08c280f6eb4ba, type: 3}
+  m_Name: Surface layer handler
   m_EditorClassIdentifier: 
-  _maxHeight: 10
-  _octaves:
-  - scale: 1
-    height: 100
-  _blockSettings:
-  - block: 8
-    height: 0.069
-  - block: 6
-    height: 0
+  _next: {fileID: 0}
+  _surfaceBlock: 0

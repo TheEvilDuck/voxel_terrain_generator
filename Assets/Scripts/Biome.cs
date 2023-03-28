@@ -4,19 +4,13 @@ using UnityEngine;
 
 
 
-[System.Serializable]
-class BlocksSettings
-{
-    public BlockType block;
-    [Range(0,1)]public float height;
-}
-
 [CreateAssetMenu(menuName ="Biomes/Create a biome")]
 public class Biome : ScriptableObject
 {
     [SerializeField]int _maxHeight = 0;
     [SerializeField]OctaveSettings[] _octaves;
-    [SerializeField]BlocksSettings[] _blockSettings;
+    [SerializeField]LayerHandler _startLayerHandler;
+    [SerializeField]BlockType _defaultBlock;
     public int GenerateHeightInPositionXY(int x,int z,int xOffset,int yOffset,int chunkWidth,int chunkHeight)
     {
         int height = 1;
@@ -47,32 +41,11 @@ public class Biome : ScriptableObject
         float heightOfHeightMapToChunkHeight = (float)height/(float)chunkHeight;
         for (int y = 0;y<height;y++)
         {
-            BlockType resultBlock;
-
-            if (y==0)
-                resultBlock = BlockType.Bedrock;
-            else
-                {
-                    float yHeightToHeightMap = (float)y/(float)(height-1);
-                    float max = 0;
-                    int maxIndex = 0;
-                    for (int i = 0;i<_blockSettings.GetLength(0);i++)
-                    {
-                        if (_blockSettings[i].height<=yHeightToHeightMap)
-                        {
-                            if (_blockSettings[i].height>=max)
-                                {
-                                    max = _blockSettings[i].height;
-                                    maxIndex = i;
-                                }
-                        }
-                
-                    }
-                    resultBlock = _blockSettings[maxIndex].block;
-                }
-                    
-                   
-            blocks[y] = resultBlock;
+            BlockType? resultBlock = BlockType.Bedrock;
+            resultBlock = _startLayerHandler.Handle(y,height);
+            if (resultBlock==null)
+                resultBlock = _defaultBlock;   
+            blocks[y] = (BlockType)resultBlock;
         }
         return blocks;
     }   
