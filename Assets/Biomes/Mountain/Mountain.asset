@@ -12,7 +12,15 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 672600d74937dd440b95fa798fc3119f, type: 3}
   m_Name: Mountain
   m_EditorClassIdentifier: 
-  _maxHeight: 0
-  _octaves: []
-  _startLayerHandler: {fileID: 0}
-  _defaultBlock: 0
+  _maxHeight: 100
+  _octaves:
+  - scale: 1000
+    height: 10
+  - scale: 400
+    height: 5
+  - scale: 300
+    height: 0.5
+  - scale: 50
+    height: 0.4
+  _startLayerHandler: {fileID: 11400000, guid: b96ff9d4e07895b499e39384028dbcd1, type: 2}
+  _defaultBlock: 4

@@ -24,7 +24,6 @@ public class PlayerMovement : MonoBehaviour
         _transform = transform;
         _playerIsInChunk = _world.worldPosToChunkCoordinates(_transform.position);
         _world.LoadChunksAround(_playerIsInChunk);
-        _world.RenderLoadedChunks(_playerIsInChunk);
     }
 
     private void Update() 
@@ -33,7 +32,6 @@ public class PlayerMovement : MonoBehaviour
         if (_playerIsInChunk!=newPlayerIsInChunk)
         {
             _world.LoadChunksAround(_playerIsInChunk);
-            _world.RenderLoadedChunks(_playerIsInChunk);
             //_world.UnrenderLoadedChunks(_playerIsInChunk);
             _playerIsInChunk = newPlayerIsInChunk;
         }

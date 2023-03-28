@@ -154,6 +154,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   _terainGenerator: {fileID: 137316381}
+  _blockDatabase: {fileID: 11400000, guid: d79f05977965c6e4e899c22284adba89, type: 2}
   _chunkPrefab: {fileID: 2556139249193266930, guid: 0f48719b8c9d6cc44bb5bbc731cce091, type: 3}
   _playerPrefab: {fileID: 2374697210159279309, guid: 0385e5105b77b0b4295f4677ac498337, type: 3}
   _chunkWidth: 30
@@ -189,8 +190,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   _biomes:
-  - {fileID: 11400000, guid: 58bf8d2f895a6a145a6c00ff4e5db532, type: 2}
-  - {fileID: 11400000, guid: f3dc9f6a9abf57a42ba81e7f44b87e3f, type: 2}
+  - {fileID: 11400000, guid: aa83e0b1db9271e4eb7610a7a3f8d691, type: 2}
   _maps:
   - _name: HeightMap
     _map:
@@ -202,11 +202,8 @@ MonoBehaviour:
       - scale: 500
         height: 0.9
     _affects:
-    - _biome: {fileID: 11400000, guid: 58bf8d2f895a6a145a6c00ff4e5db532, type: 2}
+    - _biome: {fileID: 11400000, guid: aa83e0b1db9271e4eb7610a7a3f8d691, type: 2}
       _value: 1
-      _multiplier: 500
-    - _biome: {fileID: 11400000, guid: f3dc9f6a9abf57a42ba81e7f44b87e3f, type: 2}
-      _value: -1
       _multiplier: 500
 --- !u!1 &705507993
 GameObject:

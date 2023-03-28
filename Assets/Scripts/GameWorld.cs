@@ -9,6 +9,7 @@ public class GameWorld : MonoBehaviour
 {
 
     [SerializeField] TerrainGenerator _terainGenerator;
+    [SerializeField]BlockDatabase _blockDatabase;
 
     public GameObject _chunkPrefab;
     public GameObject _playerPrefab;
@@ -18,13 +19,17 @@ public class GameWorld : MonoBehaviour
     public int _renderDistance = 4;
     public int _loadDistance = 6;
 
-    private Dictionary<Vector2Int,ChunkRenderer>_world;
+    private Dictionary<Vector2Int,ChunkRenderer>_chunkRenderers;
+    private Dictionary<Vector2Int,ChunkData>_chunkDatas;
+    private List<ChunkData>_renderQueue = new List<ChunkData>();
+    private bool _isRendering = false;
 
     
 
-    private void Start()
+    private void Awake()
     {
-        _world = new Dictionary<Vector2Int, ChunkRenderer>();
+        _chunkRenderers = new Dictionary<Vector2Int, ChunkRenderer>();
+        _chunkDatas = new Dictionary<Vector2Int, ChunkData>();
         SpawnPlayer();
         
     }
@@ -36,44 +41,41 @@ public class GameWorld : MonoBehaviour
     }
     public ChunkData GetChunkDataOfCertainChunk(Vector2Int coordinates)
     {
-        if ( !_world.ContainsKey(coordinates))
-        {
-            return null;
-        }
-        return _world[coordinates].GetChunkData();
+        _chunkDatas.TryGetValue(coordinates,out ChunkData chunkData);
+        return chunkData;
     }
     public bool ModifyBlock(Vector2Int chunkCoordinates,Vector3Int blockpos,BlockType newBlock)
     {
-        if (_world.TryGetValue(chunkCoordinates, out ChunkRenderer chunk))
+        if (_chunkDatas.TryGetValue(chunkCoordinates, out ChunkData chunkData))
         {
-            chunk._chunkData.ModifyBlock(blockpos,newBlock);
-            chunk.Render(_blockSize);
+            chunkData.ModifyBlock(blockpos,newBlock);
+            AddChunkToRenderQueue(chunkData);
             if (blockpos.x==_chunkWidth-1)
             {
-                if (_world.TryGetValue(chunkCoordinates+Vector2Int.left, out ChunkRenderer neighbor))
+                if (_chunkDatas.TryGetValue(chunkCoordinates+Vector2Int.left, out ChunkData neighbor))
                 {
-                    neighbor.Render(_blockSize);
+                    AddChunkToRenderQueue(neighbor);
                 }
             }
             if (blockpos.x==0)
             {
-                if (_world.TryGetValue(chunkCoordinates+Vector2Int.right, out ChunkRenderer neighbor))
+                if (_chunkDatas.TryGetValue(chunkCoordinates+Vector2Int.right, out ChunkData neighbor))
                 {
-                    neighbor.Render(_blockSize);
+                    AddChunkToRenderQueue(neighbor);
                 }
             }
             if (blockpos.z==_chunkWidth-1)
             {
-                if (_world.TryGetValue(chunkCoordinates+Vector2Int.up, out ChunkRenderer neighbor))
+                if (_chunkDatas.TryGetValue(chunkCoordinates+Vector2Int.up, out ChunkData neighbor))
                 {
-                    neighbor.Render(_blockSize);
+                    AddChunkToRenderQueue(neighbor);
                 }
             }
             if (blockpos.z==0)
             {
-                if (_world.TryGetValue(chunkCoordinates+Vector2Int.down, out ChunkRenderer neighbor))
+                if (_chunkDatas.TryGetValue(chunkCoordinates+Vector2Int.down, out ChunkData neighbor))
                 {
-                    neighbor.Render(_blockSize);
+                    AddChunkToRenderQueue(neighbor);
                 }
             }
         }
@@ -90,7 +92,7 @@ public class GameWorld : MonoBehaviour
             chunk.Value.UnRender();
         }
     }*/
-    public void RenderLoadedChunks(Vector2Int chunkCoordinatesCenter)
+    /*ipublic void RenderLoadedChunks(Vector2Int chunkCoordinatesCenter)
     {
         for (int x = chunkCoordinatesCenter.x-_renderDistance;x<chunkCoordinatesCenter.x+_renderDistance;x++)
         {
@@ -104,7 +106,7 @@ public class GameWorld : MonoBehaviour
                 chunk.Render(_blockSize);
                 chunk.Rendered = true;
 
-                /*if (_world.TryGetValue(new Vector2Int(x,y)+Vector2Int.left, out ChunkRenderer neighbor))
+                f (_world.TryGetValue(new Vector2Int(x,y)+Vector2Int.left, out ChunkRenderer neighbor))
                 {
                     if (!neighbor.Rendered)
                     neighbor.Render(_blockSize);
@@ -127,18 +129,18 @@ public class GameWorld : MonoBehaviour
                     if (!neighbor4.Rendered)
                     neighbor4.Render(_blockSize);
                     neighbor4.Rendered = true;
-                }*/
+                }
             }
         }
         
-    }
+    }*/
     public void LoadChunksAround(Vector2Int chunkCoordinatesCenter)
     {
         for (int x = chunkCoordinatesCenter.x-_loadDistance;x<chunkCoordinatesCenter.x+_loadDistance;x++)
         {
             for (int y = chunkCoordinatesCenter.y-_loadDistance;y<chunkCoordinatesCenter.y+_loadDistance;y++)
             {
-                if (_world.ContainsKey(new Vector2Int(x,y))) continue;
+                if (_chunkDatas.ContainsKey(new Vector2Int(x,y))) continue;
                 LoadChunkAtPosition(new Vector2Int(x,y));
             }
         }
@@ -146,23 +148,51 @@ public class GameWorld : MonoBehaviour
 
     private void LoadChunkAtPosition(Vector2Int chunkCoordinates)
     {
+        BlockType[,,]blocks = new BlockType[_chunkWidth,_chunkHeight,_chunkWidth];
+        blocks = _terainGenerator.GenerateTerrain(chunkCoordinates.x,chunkCoordinates.y,_chunkWidth,_chunkHeight);
+        ChunkData chunkData = new ChunkData(blocks,this);
+        chunkData._chunkCoordinates = chunkCoordinates;
+        chunkData.UpdateMeshData(_blockSize,_blockDatabase);
+        _chunkDatas.Add(new Vector2Int(chunkCoordinates.x,chunkCoordinates.y),chunkData);
+        AddChunkToRenderQueue(chunkData);
+
+    }
+    private void RenderChunk(ChunkData chunkData)
+    {
+        Vector2Int chunkCoordinates = chunkData._chunkCoordinates;
         var chunk =  Instantiate(_chunkPrefab);
         chunk.transform.position = new Vector3(_chunkWidth*chunkCoordinates.x*_blockSize,0,_chunkWidth*chunkCoordinates.y*_blockSize);
         ChunkRenderer chunkRenderer = chunk.GetComponent<ChunkRenderer>();
-        chunkRenderer.Rendered = false;
-        BlockType[,,]blocks = new BlockType[_chunkWidth,_chunkHeight,_chunkWidth];
-        blocks = _terainGenerator.GenerateTerrain(chunkCoordinates.x,chunkCoordinates.y,_chunkWidth,_chunkHeight);
-        chunkRenderer.SetChunkData(blocks);
-        chunkRenderer.SetWorld(this);
-        chunkRenderer.SetChunkCoordinates(new Vector2Int(chunkCoordinates.x,chunkCoordinates.y));
-        _world.Add(new Vector2Int(chunkCoordinates.x,chunkCoordinates.y),chunkRenderer);
-        
-
+        chunkRenderer.Render(_blockSize,chunkData);
+        _chunkRenderers.Add(new Vector2Int(chunkCoordinates.x,chunkCoordinates.y),chunkRenderer);
     }
 
     public Vector2Int worldPosToChunkCoordinates(Vector3 worldPos)
     {
         Vector3Int blockWorldPos = Vector3Int.FloorToInt(worldPos/_blockSize);
         return new Vector2Int(blockWorldPos.x/_chunkWidth,blockWorldPos.z/_chunkWidth);
+    }
+    private void AddChunkToRenderQueue(ChunkData chunkData)
+    {
+        if (_chunkRenderers.ContainsKey(chunkData._chunkCoordinates))
+            return;
+        _renderQueue.Add(chunkData);
+        StartCoroutine(StartRender());
+    }
+    private IEnumerator StartRender()
+    {
+        if (_isRendering)
+        yield return null;
+        else
+        {
+            _isRendering = true;
+            while (_renderQueue.Count>0)
+            {
+                RenderChunk(_renderQueue[0]);
+                _renderQueue.RemoveAt(0);
+                yield return new WaitForEndOfFrame();
+            }
+            _isRendering = false;
+        }
     }
 }

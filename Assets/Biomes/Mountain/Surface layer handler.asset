@@ -13,4 +13,4 @@ MonoBehaviour:
   m_Name: Surface layer handler
   m_EditorClassIdentifier: 
   _next: {fileID: 0}
-  _surfaceBlock: 0
+  _surfaceBlock: 4

@@ -7,24 +7,17 @@ using Unity.Profiling;
 public class ChunkRenderer: MonoBehaviour
 {
     
-    public  ChunkData _chunkData;
-    public MeshData _meshData;
     public bool Rendered;
     private static ProfilerMarker MeshingMarker = new ProfilerMarker(ProfilerCategory.Loading,"Meshing chunks");
-    [SerializeField]BlockDatabase _blockDatabase;
-    public void Render(float blockSize)
+    public void Render(float blockSize, ChunkData chunkData)
     {
         MeshingMarker.Begin();
         Mesh mesh = new Mesh();
-        _meshData = new MeshData();
-        _meshData.Clear();
-
-        _meshData.GenerateMeshData(_chunkData,blockSize,_blockDatabase);
 
         
-        mesh.vertices = _meshData._verticies.ToArray();
-        mesh.triangles = _meshData._triangles.ToArray();
-        mesh.uv = _meshData._uvs.ToArray();
+        mesh.vertices = chunkData._meshData._verticies.ToArray();
+        mesh.triangles = chunkData._meshData._triangles.ToArray();
+        mesh.uv = chunkData._meshData._uvs.ToArray();
         
         mesh.RecalculateBounds();
         mesh.RecalculateNormals();
@@ -41,22 +34,5 @@ public class ChunkRenderer: MonoBehaviour
         Destroy(gameObject);
     }*/
 
-    public void SetChunkData(BlockType[,,]blocks)
-    {
-        _chunkData = new ChunkData();
-        _chunkData._blocks = blocks;
-    }
-    public void SetWorld(GameWorld world)
-    {
-        _chunkData._world = world;
-    }
-    public void SetChunkCoordinates(Vector2Int coordinates)
-    {
-        _chunkData._chunkCoordinates = coordinates;
-    }
-    public ChunkData GetChunkData()
-    {
-        return _chunkData;
-    }
     
 }

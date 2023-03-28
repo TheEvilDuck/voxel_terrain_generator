@@ -22,10 +22,5 @@ MonoBehaviour:
     height: 0.8
   - scale: 2000
     height: 10
-  _blockSettings:
-  - block: 3
-    height: 1
-  - block: 1
-    height: 0.56
-  - block: 2
-    height: 0
+  _startLayerHandler: {fileID: 11400000, guid: a516d8de2c8c31946b31741ec79d171d, type: 2}
+  _defaultBlock: 1

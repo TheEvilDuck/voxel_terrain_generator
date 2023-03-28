@@ -7,6 +7,18 @@ public class ChunkData
     public BlockType[,,]_blocks;
     public Vector2Int _chunkCoordinates;
     public GameWorld _world;
+    public MeshData _meshData;
+    public ChunkData(BlockType[,,]blocks, GameWorld world)
+    {
+        _blocks = blocks;
+        _meshData = new MeshData();
+        _world = world;
+    }
+    public void UpdateMeshData(float blockSize,BlockDatabase blockDatabase)
+    {
+        _meshData.Clear();
+        _meshData.GenerateMeshData(this,blockSize,blockDatabase);
+    }
     public BlockType GetBlockAtPosition(Vector3Int blockPos)
     {
         if (blockPos.y<0||blockPos.y>=_blocks.GetLength(1))
