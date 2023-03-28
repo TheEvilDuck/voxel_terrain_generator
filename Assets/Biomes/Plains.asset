@@ -12,12 +12,16 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 672600d74937dd440b95fa798fc3119f, type: 3}
   m_Name: Plains
   m_EditorClassIdentifier: 
-  _maxHeight: 40
+  _maxHeight: 80
   _octaves:
   - scale: 1000
-    height: 7
-  - scale: 900
-    height: 0.15
+    height: 1
+  - scale: 500
+    height: 0.5
+  - scale: 200
+    height: 0.8
+  - scale: 2000
+    height: 10
   _blockSettings:
   - block: 3
     height: 1
