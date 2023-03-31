@@ -237,6 +237,7 @@ MonoBehaviour:
     - _biome: {fileID: 11400000, guid: aa83e0b1db9271e4eb7610a7a3f8d691, type: 2}
       _value: -0.67
       _multiplier: 239
+  _seed: 432432
 --- !u!1 &705507993
 GameObject:
   m_ObjectHideFlags: 0
