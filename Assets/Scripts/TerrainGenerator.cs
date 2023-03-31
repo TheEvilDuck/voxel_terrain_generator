@@ -7,6 +7,7 @@ public class TerrainGenerator : MonoBehaviour
 {
     [SerializeField]Biome[] _biomes;
     [SerializeField]NoiseMap[] _maps;
+    [SerializeField]int _seed = 0;
 
     private static ProfilerMarker GeneratingMarker = new ProfilerMarker(ProfilerCategory.Loading,"Generating chunks");
 
@@ -23,10 +24,13 @@ public class TerrainGenerator : MonoBehaviour
                 {
                     biomeValues.Add(biome,1);
                 }
-
+                Vector2Int seedOffset = new Vector2Int(
+                    (xOffset+_seed)*(_seed%10),
+                    (yOffset+_seed)*(_seed%10)
+                );
                 foreach (NoiseMap noiseMap in _maps)
                 {
-                    float globalValue = noiseMap._map.GetNoiseValue(x+xOffset*chunkWidth,z+yOffset*chunkWidth);
+                    float globalValue = noiseMap._map.GetNoiseValue(x+seedOffset.x*chunkWidth,z+seedOffset.y*chunkWidth);
 
                     foreach (Affect affect in noiseMap._affects)
                     {
