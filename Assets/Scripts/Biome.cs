@@ -18,9 +18,9 @@ public class Biome : ScriptableObject
         float resultHeight = (float)chunkHeight/2f;
         for (int i = 0;i<_octaves.GetLength(0);i++)
         {
-            float xNoise = (x+xOffset*chunkWidth)/_octaves[i].scale;
-            float yNoise = (z+yOffset*chunkWidth)/_octaves[i].scale;
-            resultHeight*=Mathf.PerlinNoise(xNoise,yNoise)*_octaves[i].height;
+            //float xNoise = (x+xOffset*chunkWidth)/_octaves[i].scale;
+            //float yNoise = (z+yOffset*chunkWidth)/_octaves[i].scale;
+            //resultHeight*=Mathf.PerlinNoise(xNoise,yNoise)*_octaves[i].height;
         }
 
         height = (int)resultHeight;
