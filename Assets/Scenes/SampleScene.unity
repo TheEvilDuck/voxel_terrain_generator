@@ -190,7 +190,9 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   _biomes:
+  - {fileID: 11400000, guid: 31172f8a36a7fb840b75f8764ebb4e96, type: 2}
   - {fileID: 11400000, guid: aa83e0b1db9271e4eb7610a7a3f8d691, type: 2}
+  - {fileID: 11400000, guid: f3dc9f6a9abf57a42ba81e7f44b87e3f, type: 2}
   _maps:
   - _name: HeightMap
     _map:
@@ -201,10 +203,40 @@ MonoBehaviour:
         height: 0.9
       - scale: 500
         height: 0.9
+      - scale: 2000
+        height: 0.6
+      - scale: 3000
+        height: 1.18
+      - scale: 6000
+        height: 0.4
     _affects:
+    - _biome: {fileID: 11400000, guid: f3dc9f6a9abf57a42ba81e7f44b87e3f, type: 2}
+      _value: -1
+      _multiplier: 486
+    - _biome: {fileID: 11400000, guid: 31172f8a36a7fb840b75f8764ebb4e96, type: 2}
+      _value: -0.21
+      _multiplier: 66
     - _biome: {fileID: 11400000, guid: aa83e0b1db9271e4eb7610a7a3f8d691, type: 2}
       _value: 1
-      _multiplier: 500
+      _multiplier: 411
+  - _name: TemperaturaMap
+    _map:
+      _octaves:
+      - scale: 10000
+        height: 1
+      - scale: 50000
+        height: 0.5
+      - scale: 1000
+        height: 2
+      - scale: 4000
+        height: 0.7
+    _affects:
+    - _biome: {fileID: 11400000, guid: 31172f8a36a7fb840b75f8764ebb4e96, type: 2}
+      _value: 1
+      _multiplier: 359
+    - _biome: {fileID: 11400000, guid: aa83e0b1db9271e4eb7610a7a3f8d691, type: 2}
+      _value: -0.67
+      _multiplier: 239
 --- !u!1 &705507993
 GameObject:
   m_ObjectHideFlags: 0

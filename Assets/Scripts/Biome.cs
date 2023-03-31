@@ -42,9 +42,12 @@ public class Biome : ScriptableObject
         for (int y = 0;y<height;y++)
         {
             BlockType? resultBlock = BlockType.Bedrock;
-            resultBlock = _startLayerHandler.Handle(y,height);
-            if (resultBlock==null)
-                resultBlock = _defaultBlock;   
+            if (y>0)
+            {
+                resultBlock = _startLayerHandler.Handle(y,height);
+                if (resultBlock==null)
+                    resultBlock = _defaultBlock;  
+            } 
             blocks[y] = (BlockType)resultBlock;
         }
         return blocks;
