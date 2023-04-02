@@ -6,7 +6,7 @@ public struct Affect
 {
     [SerializeField]public Biome _biome;
     [SerializeField][Range(-1,1)]public float _value;
-    [SerializeField][Range(0,500)]public float _multiplier;
+    [SerializeField][Range(-100,100)]public float _multiplier;
 }
 [System.Serializable]
 public class NoiseMap

@@ -12,6 +12,7 @@ public class OctaveSettings
 public struct Noise
 {
     public OctaveSettings[] _octaves;
+    [Range(0.01f,10f)]public float _redistribution;
     public float GetNoiseValue(int xOffset,int yOffset)
     {
         float noiseValue = 1f;
@@ -24,7 +25,7 @@ public struct Noise
             amplitudeSum+=1f/_octaves[i].height;
             noiseValue+=calculatedNoise;
         }
-        Debug.Log(noiseValue/amplitudeSum);
-        return noiseValue/amplitudeSum;
+        float result = Mathf.Pow(noiseValue/amplitudeSum,_redistribution);
+        return result;
     }
 }

@@ -5,17 +5,13 @@ using UnityEngine;
 public abstract class LayerHandler : ScriptableObject
 {
     [SerializeField] LayerHandler _next;
-    public BlockType? Handle(int currentHeight,int maxHeight)
+    public bool Handle(BlockType[,,] blocks,Vector2Int column,int height,int maxHeight)
     {
-        BlockType? result = TryHandle(currentHeight,maxHeight);
-        if (result==null)
-        {
-            if (_next!=null)
-                result = _next.Handle(currentHeight,maxHeight);
-        }
-        return result;
-
-
+        if (TryHandle(blocks,column, height,maxHeight))
+            return true;
+        if (_next!=null)
+            return _next.Handle(blocks,column,height, maxHeight);
+        return false;
     }
-    protected abstract BlockType? TryHandle(int currentHeight,int maxHeight);
+    protected abstract bool TryHandle(BlockType[,,] blocks,Vector2Int column,int height,int maxHeight);
 }

@@ -12,13 +12,14 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 672600d74937dd440b95fa798fc3119f, type: 3}
   m_Name: Desert
   m_EditorClassIdentifier: 
-  _maxHeight: 100
-  _octaves:
-  - scale: 1000
-    height: 10
-  - scale: 100
-    height: 0.5
-  - scale: 2000
-    height: 0.4
+  _noise:
+    _octaves:
+    - frequency: 0.01
+      height: 0.2
+    - frequency: 0.02
+      height: 1
+    - frequency: 0.1
+      height: 0.9
+    _redistribution: 5.85
   _startLayerHandler: {fileID: 11400000, guid: af873ce8277ee804295d335154fea5f5, type: 2}
   _defaultBlock: 7

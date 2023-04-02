@@ -6,12 +6,16 @@ using UnityEngine;
 public class SurfaceLayerHandler : LayerHandler
 {
     [SerializeField] BlockType _surfaceBlock;
-    protected override BlockType? TryHandle(int currentHeight,int maxHeight)
+    protected override bool TryHandle(BlockType[,,] blocks,Vector2Int column,int height,int maxHeight)
     {
-        if (currentHeight>=maxHeight-1)
+        if (height==maxHeight-1)
+        {
+            if (blocks[column.x,height,column.y]==BlockType.Air)
             {
-                return _surfaceBlock;
+                blocks[column.x,height,column.y] = _surfaceBlock;
+                return true;
             }
-        return null;
+        }
+        return false;
     }
 }

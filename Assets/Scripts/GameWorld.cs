@@ -36,7 +36,7 @@ public class GameWorld : MonoBehaviour
     private void SpawnPlayer()
     {
         var player = Instantiate(_playerPrefab);
-        player.transform.position = new Vector3(_chunkWidth*_blockSize/2,_chunkHeight*_blockSize+1,_chunkWidth*_blockSize/2);
+        player.transform.position = new Vector3(_chunkWidth*_blockSize/2,1.5f*_chunkHeight*_blockSize+1,_chunkWidth*_blockSize/2);
         player.GetComponent<PlayerMovement>().SetWorld(this);
     }
     public ChunkData GetChunkDataOfCertainChunk(Vector2Int coordinates)

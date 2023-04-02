@@ -7,19 +7,15 @@ public class ThresholdLayerHandler : LayerHandler
     [SerializeField][Range(0,1)]float _maxHeight;
     [SerializeField]BlockType _resulBlock;
     [SerializeField]bool _above;
-    protected override BlockType? TryHandle(int currentHeight, int maxHeight)
+    protected override bool TryHandle(BlockType[,,] blocks,Vector2Int column,int height,int maxHeight)
     {
-        float percent = (float)currentHeight/(float)maxHeight;
-        if (_above)
+        float percent = (float)height+1f/(float)maxHeight;
+        if (blocks[column.x,height,column.y]==BlockType.Air
+        &&(_above&&percent>=_maxHeight||!_above&&percent<=_maxHeight))
         {
-            if (percent>=_maxHeight)
-                return _resulBlock;
+            blocks[column.x,height,column.y] = _resulBlock;
+            return true;
         }
-        else
-        {
-            if (percent<=_maxHeight)
-                return _resulBlock;
-        }
-        return null;
+        return false;
     }
 }
