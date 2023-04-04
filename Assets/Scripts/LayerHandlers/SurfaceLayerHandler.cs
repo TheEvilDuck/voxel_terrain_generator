@@ -6,13 +6,13 @@ using UnityEngine;
 public class SurfaceLayerHandler : LayerHandler
 {
     [SerializeField] BlockType _surfaceBlock;
-    protected override bool TryHandle(BlockType[,,] blocks,Vector2Int column,int height,int maxHeight)
+    protected override bool TryHandle(BlockType[,,] blocks,Vector3Int blockPos,int maxHeight, Vector2Int chunkCoordinates,float chunkWidth)
     {
-        if (height==maxHeight-1)
+        if (blockPos.y==maxHeight-1)
         {
-            if (blocks[column.x,height,column.y]==BlockType.Air)
+            if (blocks[blockPos.x,blockPos.y,blockPos.z]==BlockType.Air)
             {
-                blocks[column.x,height,column.y] = _surfaceBlock;
+                blocks[blockPos.x,blockPos.y,blockPos.z] = _surfaceBlock;
                 return true;
             }
         }

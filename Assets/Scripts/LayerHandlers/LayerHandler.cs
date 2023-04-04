@@ -5,13 +5,13 @@ using UnityEngine;
 public abstract class LayerHandler : ScriptableObject
 {
     [SerializeField] LayerHandler _next;
-    public bool Handle(BlockType[,,] blocks,Vector2Int column,int height,int maxHeight)
+    public bool Handle(BlockType[,,] blocks,Vector3Int blockPos,int maxHeight, Vector2Int chunkCoordinates,float chunkWidth)
     {
-        if (TryHandle(blocks,column, height,maxHeight))
+        if (TryHandle(blocks,blockPos,maxHeight,chunkCoordinates,chunkWidth))
             return true;
         if (_next!=null)
-            return _next.Handle(blocks,column,height, maxHeight);
+            return _next.Handle(blocks,blockPos,maxHeight,chunkCoordinates,chunkWidth);
         return false;
     }
-    protected abstract bool TryHandle(BlockType[,,] blocks,Vector2Int column,int height,int maxHeight);
+    protected abstract bool TryHandle(BlockType[,,] blocks,Vector3Int blockPos,int maxHeight, Vector2Int chunkCoordinates,float chunkWidth);
 }

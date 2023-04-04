@@ -23,7 +23,7 @@ public class Biome : ScriptableObject
             height = chunkHeight;
         for (int y = 0;y<height;y++)
         {
-            if (!_startLayerHandler.Handle(chunk,column,y,height))
+            if (!_startLayerHandler.Handle(chunk,new Vector3Int(column.x,y,column.y),height,chunkCoordinates,chunkWidth))
             {
                 if (chunk[column.x,y,column.y]==BlockType.Air)
                     chunk[column.x,y,column.y] = _defaultBlock;
